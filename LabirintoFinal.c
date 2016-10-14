@@ -26,6 +26,8 @@ void entrada_saida(char** lab);///sorteia a entra e saida
 
 void gera_lab(int px, int py, char** lab);///gera o labirinto
 
+int jogar(char** lab);
+
 void solucao(int px, int py,char** lab);///solucao do labirinto
 
 void arquivoLabirinto(char** lab);///faz a operação de escrever o labirinto no arquivo
@@ -45,7 +47,7 @@ Entrada entrada_global;///Posição da entrada
 int main()
 {
     char** lab;
-    int i, j, save, load, opcao=1, novo;
+    int i, j, save, load, opcao=1, novo, solution;
     while(opcao)
     {
         novo = -1;
@@ -89,8 +91,10 @@ int main()
             arquivoLabirinto(lab);
 
         cont = 0;
-        solucao(entrada_global.px, entrada_global.py, lab);
-
+        ///linha abaixo é um teste
+        solution = jogar(lab);
+        if(solution)
+            solucao(entrada_global.px, entrada_global.py, lab);
         printf("\n");
         imprime_lab(lab);
         printf("\nCusto: %d passos", cont);
@@ -458,6 +462,82 @@ tPilha* remove_pilha(tPilha* pilha)
     return pilha;
 }
 
+int jogar(char** lab)
+{
+    char opcao;
+    int px, py, flag=0;
 
+    px = entrada_global.px;
+    py = entrada_global.py;
+
+    while(flag==0)
+    {
+        printf("Entre com a direcao:\n");
+        scanf("\n%c", &opcao);
+        switch(opcao)
+        {
+            case 'w':///cima
+            case 'W':
+                if(px-1<l&&lab[px-1][py]!='1')
+                {
+                    lab[px][py] = 'x';
+                    //lab[--px][py] = '*';
+                    px--;
+                    cont++;
+                }
+                break;
+            case 'd':///direita
+            case 'D':
+                if(py+1<c&&lab[px][py+1]!='1')
+                {
+                    lab[px][py] = 'x';
+                    //lab[px][++py] = '*';
+                    py++;
+                    cont++;
+                }
+                break;
+            case 's':///baixo
+            case 'S':
+                if(px+1>=0&&lab[px+1][py]!='1')
+                {
+                    lab[px][py] = 'x';
+                    //lab[++px][py] = '*';
+                    px++;
+                    cont++;
+                }
+                break;
+            case 'a':///esquerda
+            case 'A':
+                if(py-1>=0&&lab[px][py-1]!='1')
+                {
+                    lab[px][py] = 'x';
+                    //lab[px][--py] = '*';
+                    py--;
+                    cont++;
+                }
+                break;
+            case 'z':///sair e mostrar solução
+            case 'Z':
+                entrada_global.px = px;
+                entrada_global.py = py;
+                return 1;
+        }
+        if(lab[px][py]=='S')
+        {
+            system("cls");
+            printf("Parabens! Voce venceu!\n");
+            entrada_global.px = px;
+            entrada_global.py = py;
+            return 0;
+        }
+        else
+        {
+            lab[px][py] = '*';
+            system("cls");
+            imprime_lab(lab);
+        }
+    }
+
+}
 
 
