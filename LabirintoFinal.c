@@ -47,7 +47,7 @@ Entrada entrada_global;///Posição da entrada
 int main()
 {
     char** lab;
-    int i, j, save, load, opcao=1, novo, solution;
+    int i, j, save, load, opcao=1, novo, solution, play;
     while(opcao)
     {
         novo = -1;
@@ -92,7 +92,12 @@ int main()
 
         cont = 0;
         ///linha abaixo é um teste
-        solution = jogar(lab);
+        printf("Deseja jogar? (1 - Sim 0 - Nao)\n");
+        scanf("\n%d", &play);
+        if(play)
+            solution = jogar(lab);
+        else
+            solution = 1;
         if(solution)
             solucao(entrada_global.px, entrada_global.py, lab);
         printf("\n");
